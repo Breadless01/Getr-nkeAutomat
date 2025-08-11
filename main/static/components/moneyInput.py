@@ -1,6 +1,6 @@
 from tkinter import Frame, Tk, Label, Button
 from PIL import Image, ImageTk
-from main.automat import Automat
+from main.vendingMachine import Automat
 
 
 class MoneyInput:

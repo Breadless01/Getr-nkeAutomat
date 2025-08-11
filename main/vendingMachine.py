@@ -54,7 +54,7 @@ class VendingMachine:
                  csv_path: Path):
         
         if coins_desc_cents is None:
-            coins_desc_cents = [2000, 1000, 500, 200, 100, 50, 20, 10, 5]
+            coins_desc_cents = [200, 100, 50, 20, 10, 5]
         self._coins = coins_desc_cents
         self._balance = 0
         self._inventory: Dict[str, StockItem] = {}

@@ -14,6 +14,7 @@ class App:
         print("Available drinks:", automat.getDrinkList())
 
         self.openWindow()
+        print("Widow opened")
     
     def openWindow(self):
         def window_thread():
@@ -22,3 +23,5 @@ class App:
         
         thread = Thread(target=window_thread)
         thread.start()
+
+    

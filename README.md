@@ -1,0 +1,1 @@
+# Getr-nkeAutomat

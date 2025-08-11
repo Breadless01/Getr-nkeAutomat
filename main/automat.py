@@ -6,6 +6,10 @@ class Automat:
     def __init__(self):
         self.__change = {1: 0, 2: 0, 5: 0, 10: 0, 20: 0, 50: 0}
         self.__drinkList = []
+        self.moneyInput = 0.00
+
+    def addInputMoney(self, amount):
+        self.moneyInput += amount
 
     def addDrink(self, drinkName, drinkPrice, drinkQuantity):
         newDrink = Drink(drinkName, drinkPrice, drinkQuantity)

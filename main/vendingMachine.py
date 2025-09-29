@@ -3,7 +3,7 @@ from typing import Dict, List, Optional, Literal, Tuple
 import csv
 from pathlib import Path
 from decimal import *
-from db import Db
+from main.db import Db
 
 getcontext().prec = 2
 
@@ -70,8 +70,8 @@ class VendingMachine:
                     price_cents = self._parse_price_to_cents(row['price'])
                     stock = int(row['stock'])
                     self._inventory[key] = StockItem(Drink(key, name, price_cents), max(0, int(stock)))
-        elif self._db:
-            self._inventory = self._db.list_stock_items()
+        # elif self._db:
+        #     self._inventory = self._db.list_stock_items()
 
     @property
     def balance_cents(self) -> int:

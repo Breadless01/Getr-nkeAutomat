@@ -1,8 +1,8 @@
 from customtkinter import RIGHT, CTk, CTkFrame, CTkLabel, CTkButton, CTkImage, StringVar, LEFT, set_default_color_theme
 from pathlib import Path
 from PIL import Image
-from db import Db
-from customError import DbNotFoundError
+from main.db import Db
+from main.customError import DbNotFoundError
 
 from main.vendingMachine import VendingMachine
 

@@ -1,6 +1,8 @@
 from customtkinter import RIGHT, CTk, CTkFrame, CTkLabel, CTkButton, CTkImage, StringVar, LEFT, set_default_color_theme
 from pathlib import Path
 from PIL import Image
+from db import Db
+from customError import DbNotFoundError
 
 from main.vendingMachine import VendingMachine
 
@@ -11,10 +13,13 @@ class App(CTk):
     def __init__(self):
         super().__init__()
         self.csv_path = Path("main/stock.csv")
+        self.db = Db()
+        if self.db:
+            self.vm = VendingMachine(db=self.db)
         if self.csv_path.exists():
             self.vm = VendingMachine(csv_path=self.csv_path)
         else:
-            raise FileNotFoundError(f"CSV file not found: {self.csv_path}")
+            raise DbNotFoundError(f"CSV file or DB not found")
         self.title("Getränke Automat")
         self.geometry("1100x900")
         self.minsize(900, 800)
@@ -173,7 +178,12 @@ class App(CTk):
         else:
             self._update_display(result.message)
         self._refresh_catalog()
+        self._payout_change()
         self._update_balance()
+
+    def _payout_change(self):
+        result = self.vm.payout_change()
+        self._update_display(f"Change: {result.total_euro:.2f} €")
 
     # -----------------------------
     # Geld

@@ -3,6 +3,7 @@ from typing import Dict, List, Optional, Literal, Tuple
 import csv
 from pathlib import Path
 from decimal import *
+from db import Db
 
 getcontext().prec = 2
 
@@ -51,7 +52,7 @@ class VendingMachine:
     def __init__(self,
                  *,
                  coins_desc_cents: Optional[List[int]] = None,
-                 csv_path: Path):
+                 csv_path: Path = None, db: Db = None):
         
         if coins_desc_cents is None:
             coins_desc_cents = [200, 100, 50, 20, 10, 5]
@@ -59,14 +60,18 @@ class VendingMachine:
         self._balance = 0
         self._inventory: Dict[str, StockItem] = {}
         self._csv_path = csv_path
-        with open(self._csv_path, newline='', encoding='utf-8') as f:
-            reader = csv.DictReader(f)
-            for row in reader:
-                key = row['key']
-                name = row['name']
-                price_cents = self._parse_price_to_cents(row['price'])
-                stock = int(row['stock'])
-                self._inventory[key] = StockItem(Drink(key, name, price_cents), max(0, int(stock)))
+        self._db = db
+        if self._csv_path:
+            with open(self._csv_path, newline='', encoding='utf-8') as f:
+                reader = csv.DictReader(f)
+                for row in reader:
+                    key = row['key']
+                    name = row['name']
+                    price_cents = self._parse_price_to_cents(row['price'])
+                    stock = int(row['stock'])
+                    self._inventory[key] = StockItem(Drink(key, name, price_cents), max(0, int(stock)))
+        elif self._db:
+            self._inventory = self._db.list_stock_items()
 
     @property
     def balance_cents(self) -> int:
@@ -100,6 +105,7 @@ class VendingMachine:
             return CoinBreakdown(0.00, [])
         total, coins = self._breakdown(self._balance)
         self._balance -= total
+        self._balance = 0
         return CoinBreakdown(total, coins)
     
     def cancel(self) -> CoinBreakdown:
